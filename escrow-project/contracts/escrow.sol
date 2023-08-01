@@ -2,26 +2,26 @@
 pragma solidity 0.8.17;
 
 contract Escrow {
-	address public arbiter;
-	address public beneficiary;
-	address public depositor;
+    address public arbiter;
+    address public beneficiary;
+    address public depositor;
     bool public isApproved;
     mapping(address => uint256) public recieveAddresses;
 
-	constructor(address _arbiter, address _beneficiary) payable {
-		arbiter = _arbiter;
-		beneficiary = _beneficiary;
-		depositor = msg.sender;
-	}
+    constructor(address _arbiter, address _beneficiary) payable {
+	arbiter = _arbiter;
+	beneficiary = _beneficiary;
+	depositor = msg.sender;
+    }
 
-	event Approved(uint);
+    event Approved(uint);
     function approve() external byArbiter {
-		uint balance = address(this).balance;
-		(bool sent, ) = payable(beneficiary).call{value: balance}("");
- 		require(sent, "Failed to send Ether");
-		emit Approved(balance);
-		isApproved = true;
-	}
+	uint balance = address(this).balance;
+	(bool sent, ) = payable(beneficiary).call{value: balance}("");
+ 	require(sent, "Failed to send Ether");
+	emit Approved(balance);
+	isApproved = true;
+    }
 
     event methodApproved(uint);
     function transferIfapproved(uint _amount) external byArbiter { // backup method if above appprove function fail for any reason...
